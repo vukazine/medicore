@@ -3,6 +3,20 @@
 import { useState, useEffect } from 'react'
 
 export default function LandingPage() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  const navItems = [
+    { title: 'Why Our Service', href: '#why-our-service' },
+    { title: 'How It Works', href: '#how-it-works' },
+    { title: 'Pricing', href: '#pricing' },
+    { title: 'FAQ', href: '#faq' },
+    { title: 'About Us', href: '#about-us' }
+  ]
+
   // Hero image carousel state
   const heroImages = [
     '/image/Doctors/image1.jpg',
@@ -10,6 +24,18 @@ export default function LandingPage() {
     '/image/Doctors/image3.jpg'
   ]
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+  // Contact form state
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    organization: '',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState('')
+  const [isSuccess, setIsSuccess] = useState(false)
 
   // Auto-rotate images every 6 seconds
   useEffect(() => {
@@ -22,29 +48,164 @@ export default function LandingPage() {
     return () => clearInterval(interval)
   }, [])
 
+  // Handle form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitMessage('')
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setIsSuccess(true)
+        setSubmitMessage(data.message)
+        // Reset form
+        setFormData({
+          fullName: '',
+          email: '',
+          phone: '',
+          organization: '',
+          message: ''
+        })
+      } else {
+        setIsSuccess(false)
+        setSubmitMessage(data.error || 'Something went wrong. Please try again.')
+      }
+    } catch (error) {
+      setIsSuccess(false)
+      setSubmitMessage('Network error. Please check your connection and try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="flex flex-col min-h-screen bg-white text-gray-900">
       {/* Nav */}
-      <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-          <a href="#home" className="flex items-center font-semibold">
-            <img src="/image/logos/logo2.png" alt="Vukazine Logo" className="h-12 w-12 object-contain" />
-          </a>
-          <nav className="hidden items-center gap-6 md:flex">
-            <a href="#features" className="hover:text-emerald-700">Features</a>
-            <a href="#how" className="hover:text-emerald-700">How it works</a>
-            <a href="#security" className="hover:text-emerald-700">Security</a>
-            <a href="#pricing" className="hover:text-emerald-700">Pricing</a>
-            <a href="#faq" className="hover:text-emerald-700">FAQ</a>
-          </nav>
-          <div className="hidden md:block">
-            <a href="#book" className="rounded-xl bg-emerald-600 px-4 py-2 font-medium text-white hover:bg-emerald-700">Book a 15‑min demo</a>
+      <header className="sticky top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm py-3 shadow-md transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <a href="#home" className="flex items-center group">
+              <img src="/image/logos/logo.png" alt="Vukazine Logo" className="h-9 w-auto transition-transform group-hover:scale-105" />
+              <span className="ml-3 text-lg font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">Vukazine</span>
+            </a>
+            
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center">
+              <nav className="flex items-center space-x-6">
+                {navItems.map((item, index) => (
+                  <a
+                    key={index}
+                    href={item.href}
+                    className="relative text-gray-700 hover:text-gray-900 px-2 py-2 text-[15px] font-medium transition-colors duration-200 after:absolute after:left-0 after:bottom-0 after:h-0.5 after:w-0 after:bg-blue-600 after:transition-all hover:after:w-full"
+                  >
+                    {item.title}
+                  </a>
+                ))}
+              </nav>
+              
+              {/* Auth buttons */}
+              <div className="flex items-center space-x-5 ml-10 pl-10 border-l border-gray-200">
+                <a
+                  href="#signin"
+                  className="text-gray-700 hover:text-gray-900 px-3 py-2 text-[15px] font-medium transition-colors duration-200 hover:bg-gray-50 rounded-md"
+                >
+                  Sign in
+                </a>
+                <a
+                  href="#demo"
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 px-5 py-2 text-[15px] font-medium rounded-lg transition-all duration-200 hover:shadow-md active:scale-95"
+                >
+                  Demo
+                </a>
+              </div>
+            </div>
+
+            {/* Mobile menu button */}
+            <button
+              type="button"
+              className="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-gray-700 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200"
+              aria-controls="mobile-menu"
+              aria-expanded={isMobileMenuOpen}
+              onClick={toggleMobileMenu}
+            >
+              <span className="sr-only">Open main menu</span>
+              <svg
+                className="h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+
+          {/* Mobile Navigation */}
+          <div 
+            className={`${isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'} md:hidden absolute left-0 right-0 top-full px-4 transition-all duration-200`}
+          >
+            <div className="mx-auto max-w-7xl">
+              <div className="bg-white mt-2 rounded-xl shadow-xl ring-1 ring-gray-900/5 p-4">
+                <div className="space-y-1">
+                  {navItems.map((item, index) => (
+                    <a
+                      key={index}
+                      href={item.href}
+                      className="block px-3 py-2.5 text-[15px] font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {item.title}
+                    </a>
+                  ))}
+                  <div className="border-t border-gray-100 my-3"></div>
+                  <a
+                    href="#signin"
+                    className="block px-3 py-2.5 text-[15px] font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Sign in
+                  </a>
+                  <a
+                    href="#demo"
+                    className="block px-3 py-2.5 mt-2 text-[15px] font-medium text-center bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 rounded-lg transition-all duration-200"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Demo
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Hero */}
-      <section id="home" className="relative h-screen overflow-hidden">
+      <section id="home" className="relative bg-black overflow-hidden h-[calc(100vh-70px)]">
         {/* Background Images Carousel */}
         <div className="absolute inset-0">
           {heroImages.map((image, index) => (
@@ -60,7 +221,7 @@ export default function LandingPage() {
                 className="h-full w-full object-cover"
               />
               {/* Dark overlay for better text readability */}
-              <div className="absolute inset-0 bg-black/40"></div>
+              <div className="absolute inset-0 bg-black/70"></div>
             </div>
           ))}
         </div>
@@ -76,7 +237,7 @@ export default function LandingPage() {
                 Vukazine reads clinical notes, suggests ICD‑10/CPT codes, and flags risks before submission. Fewer rejections, faster revenue.
               </p>
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                <a href="#book" className="rounded-xl bg-emerald-600 px-6 py-4 text-center text-lg font-medium text-white hover:bg-emerald-700">Book a 15‑min demo</a>
+                <a href="#book" className="rounded-xl bg-emerald-600 px-6 py-4 text-center text-lg font-medium text-white hover:bg-emerald-700">Get Started</a>
                 <a href="#how" className="rounded-xl border border-white px-6 py-4 text-center text-lg font-medium text-white hover:bg-white/10">See how it works</a>
               </div>
               <div className="mt-8 flex items-center gap-6 text-sm text-gray-300">
@@ -119,7 +280,7 @@ export default function LandingPage() {
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Medical Coding Automation</h3>
                 <p className="text-gray-600 mb-4">Turn free-text notes into ICD-10/CPT codes with accuracy checks.</p>
                 <button className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 transition-colors">
-                  Book a Demo
+                  Get Started
                 </button>
               </div>
 
@@ -283,7 +444,7 @@ export default function LandingPage() {
               <li>☑ PHI pseudonymisation options</li>
               <li>☑ Data locality controls (EU/SA/US)</li>
             </ul>
-            <a href="#book" className="mt-6 inline-block rounded-xl bg-emerald-600 px-4 py-2 font-medium text-white hover:bg-emerald-700">Request security brief</a>
+            <a href="#book" className="mt-6 inline-block rounded-xl bg-emerald-600 px-4 py-2 font-medium text-white hover:bg-emerald-700">Contact us for security details</a>
           </div>
         </div>
       </section>
@@ -307,7 +468,7 @@ export default function LandingPage() {
                 <ul className="mt-4 list-inside list-disc space-y-1 text-gray-700">
                   {p.bullets.map((b) => <li key={b}>{b}</li>)}
                 </ul>
-                <a href="#book" className="mt-6 inline-block rounded-xl bg-emerald-600 px-4 py-2 font-medium text-white hover:bg-emerald-700">Start a pilot</a>
+                <a href="#book" className="mt-6 inline-block rounded-xl bg-emerald-600 px-4 py-2 font-medium text-white hover:bg-emerald-700">Get Started</a>
               </div>
             ))}
           </div>
@@ -336,22 +497,136 @@ export default function LandingPage() {
       </section>
 
       {/* Book demo */}
+            {/* Contact Form */}
       <section id="book" className="bg-emerald-600">
         <div className="mx-auto max-w-7xl px-4 py-16 text-white">
           <div className="grid items-center gap-8 md:grid-cols-2">
             <div>
-              <h2 className="text-3xl font-bold">Book a 15‑minute demo</h2>
-              <p className="mt-2 text-emerald-100">We’ll review your current process and show how Vukazine reduces denials fast.</p>
+              <h2 className="text-3xl font-bold">Get Started with Vukazine</h2>
+              <p className="mt-2 text-emerald-100">Fill in your details and we'll get in touch to discuss how Vukazine can reduce your billing denials.</p>
               <ul className="mt-4 list-inside list-disc space-y-1 text-emerald-50">
-                <li>Bring one anonymised note—we’ll run it live.</li>
-                <li>No obligation, no jargon.</li>
+                <li>Personalized consultation for your clinic</li>
+                <li>Free assessment of your current coding process</li>
+                <li>No obligation, no jargon</li>
               </ul>
             </div>
-            <div className="rounded-2xl bg-white p-4 text-gray-900 shadow-lg">
-              {/* Replace src with your Calendly or Tally form embed */}
-              <div className="aspect-video w-full rounded-lg border bg-gray-50 p-4 text-center text-sm text-gray-600">
-                Embed your Calendly/Tally form here
-              </div>
+            <div className="rounded-2xl bg-white p-6 text-gray-900 shadow-lg">
+              {submitMessage && (
+                <div className={`mb-4 p-4 rounded-lg ${
+                  isSuccess 
+                    ? 'bg-green-50 text-green-800 border border-green-200' 
+                    : 'bg-red-50 text-red-800 border border-red-200'
+                }`}>
+                  {submitMessage}
+                </div>
+              )}
+              
+              <form className="space-y-4" onSubmit={handleSubmit}>
+                <div>
+                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    required
+                    value={formData.fullName}
+                    onChange={handleInputChange}
+                    disabled={isSubmitting}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    placeholder="Enter your full name"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                    Email Address *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    disabled={isSubmitting}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    placeholder="your.email@clinic.com"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                    Contact Number *
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    disabled={isSubmitting}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    placeholder="+27 XX XXX XXXX"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="organization" className="block text-sm font-medium text-gray-700 mb-1">
+                    Clinic/Hospital Name
+                  </label>
+                  <input
+                    type="text"
+                    id="organization"
+                    name="organization"
+                    value={formData.organization}
+                    onChange={handleInputChange}
+                    disabled={isSubmitting}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    placeholder="Your clinic or hospital name"
+                  />
+                </div>
+                
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                    How can we help? (Optional)
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={3}
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    disabled={isSubmitting}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    placeholder="Tell us about your current coding challenges..."
+                  ></textarea>
+                </div>
+                
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full rounded-lg bg-emerald-600 px-4 py-3 font-medium text-white hover:bg-emerald-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Sending...
+                    </>
+                  ) : (
+                    'Submit Details'
+                  )}
+                </button>
+                
+                <p className="text-xs text-gray-500 text-center">
+                  We respect your privacy. Your information will only be used to contact you about Vukazine services.
+                </p>
+              </form>
             </div>
           </div>
         </div>
