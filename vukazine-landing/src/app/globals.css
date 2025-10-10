@@ -39,3 +39,17 @@ body {
 /* Utility (if tailwind not already enriched) */
 [class*='animate-[float_'] { animation-name: float; }
 [class*='animate-[scan_'] { animation-name: scan; }
+
+/* Persistent Hero Overlay Effect */
+.hero-overlay-content {
+  background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.95) 10%, white 20%);
+}
+
+.hero-overlay-content.dark {
+  background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.95) 10%, black 20%);
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
