@@ -124,6 +124,7 @@ export default function LandingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitMessage, setSubmitMessage] = useState('')
   const [isSuccess, setIsSuccess] = useState(false)
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false)
 
   // Auto-rotate images every 6 seconds
   useEffect(() => {
@@ -292,10 +293,9 @@ export default function LandingPage() {
           </div>
 
           {/* Mobile Navigation */}
-          <div 
-            className={`${isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'} md:hidden absolute left-0 right-0 top-full px-4 transition-all duration-200`}
-          >
+          <div className={`${isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'} md:hidden absolute left-0 right-0 top-full px-4 transition-all duration-200`}>
             <div className="mx-auto max-w-7xl">
+          </div>
               <div className="bg-black/70 backdrop-blur-lg mt-2 rounded-xl shadow-2xl border border-white/10 p-4">
                 <div className="space-y-1">
                   {navItems.map((item, index) => (
@@ -327,11 +327,10 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-        </div>
       </header>
 
-      {/* Hero */}
-      <section id="home" className="relative bg-black overflow-hidden min-h-screen">
+      {/* Hero - Fixed for persistent overlay effect */}
+      <section id="home" className="fixed top-0 left-0 w-full h-screen bg-black overflow-hidden z-0">
         {/* Background Images Carousel */}
         <div className="absolute inset-0">
           {heroImages.map((image, index) => (
@@ -362,7 +361,7 @@ export default function LandingPage() {
               <p className="mt-4 text-xl text-gray-200 md:text-2xl">
                 <TypewriterText phrases={[
                   'Our Code is Clear',
-                  'Zero Denials',
+                  'Zero Denials. Guaranteed Precision.',
                   'Faster Payments'
                 ]} />
               </p>
@@ -416,8 +415,11 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Content sections container - slides over the fixed hero */}
+      <div className={`relative z-10 hero-overlay-content ${isDark ? 'dark' : ''}`} style={{ marginTop: '100vh' }}>
+
       {/* Trust & Proof (Security + ROI + FAQ) — themable */}
-  <section id="trust" className={`py-20 scroll-mt-24 ${isDark ? 'bg-black/95' : 'bg-white'}`}>
+      <section id="trust" className={`py-20 scroll-mt-24 ${isDark ? 'bg-black/95' : 'bg-white'}`}>
         <div className="mx-auto max-w-7xl px-6 md:px-10">
           <div className="mb-12 text-center">
             <h2 className={`text-4xl md:text-5xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>Trust and Compliance are Built-In.</h2>
@@ -425,144 +427,229 @@ export default function LandingPage() {
 
           <div className="grid gap-10 lg:grid-cols-2">
             {/* Security & Compliance */}
-            <div>
-              <h3 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Security & Compliance</h3>
-              <p className={`mt-3 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Designed for healthcare: least‑privilege access, auditability, retention controls, and private deployment options.</p>
-              <ul className={`mt-6 space-y-2 list-disc list-inside ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                <li>Encryption in transit and at rest (TLS, AES‑256)</li>
-                <li>POPIA/HIPAA‑aligned data handling</li>
-                <li>Data minimisation by design</li>
-              </ul>
-              <div className={`mt-6 rounded-2xl p-6 shadow-sm ${isDark ? 'border border-white/10 bg-white/5 text-gray-200' : 'border border-gray-200 bg-white text-gray-800'}`}>
-                <div className={`mb-2 text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Compliance checklist</div>
-                <ul className={`space-y-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                  <li>☑ Role‑based access control and SSO support</li>
-                  <li>☑ Access logging and full audit trails</li>
-                  <li>☑ PHI pseudonymisation options</li>
-                  <li>☑ Data locality controls (EU/SA/US)</li>
+            <div className={`flex flex-col justify-between rounded-2xl p-6 shadow-sm w-full min-h-[370px] border ${isDark ? 'bg-white/5 border-white/10 text-gray-200' : 'bg-white border-gray-200 text-gray-900'}`} style={{margin:'0'}}>
+              <div>
+                <h3 className={`mb-2 text-sm font-medium ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Compliance checklist</h3>
+                <ul className="space-y-3 text-base font-medium">
+                  <li className="flex items-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-500 min-w-[18px] min-h-[18px]"><circle cx="11" cy="11" r="10" stroke="currentColor" strokeWidth="2"/><path d="M7 11l2.5 2.5L15 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    Role‑based access control and SSO support
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-500 min-w-[18px] min-h-[18px]"><circle cx="11" cy="11" r="10" stroke="currentColor" strokeWidth="2"/><path d="M7 11l2.5 2.5L15 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    Access logging and full audit trails
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-500 min-w-[18px] min-h-[18px]"><circle cx="11" cy="11" r="10" stroke="currentColor" strokeWidth="2"/><path d="M7 11l2.5 2.5L15 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    PHI pseudonymisation options
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-500 min-w-[18px] min-h-[18px]"><circle cx="11" cy="11" r="10" stroke="currentColor" strokeWidth="2"/><path d="M7 11l2.5 2.5L15 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    Data locality controls (EU/SA/US)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-500 min-w-[18px] min-h-[18px]"><circle cx="11" cy="11" r="10" stroke="currentColor" strokeWidth="2"/><path d="M7 11l2.5 2.5L15 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    Regular security audits and penetration testing
+                  </li>
                 </ul>
-                <a href="#book" className={`mt-6 inline-block rounded-xl px-4 py-2 text-sm font-semibold ${isDark ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:brightness-110' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}>Contact us for security details</a>
               </div>
             </div>
 
-            {/* Results + FAQs */}
-            <div className="space-y-6">
-              {/* ROI / Results */}
-              <div className={`rounded-2xl p-6 shadow-sm ${isDark ? 'border border-white/10 bg-white/5' : 'border border-gray-200 bg-white'}`}>
-                <div className={`text-sm font-medium ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Results</div>
-                <h3 className={`mt-1 text-xl font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Lower denials. Faster reimbursements. Less manual coding.</h3>
-                <p className={`mt-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>See projected impact for your workflow in minutes.</p>
-                <a href="#book" className={`mt-4 inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold ${isDark ? 'bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 text-black hover:brightness-105' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}>Calculate My Savings</a>
-              </div>
-
-              {/* FAQs (anchor preserved for nav) */}
-              <div id="faq" className={`rounded-2xl p-6 shadow-sm scroll-mt-24 ${isDark ? 'border border-white/10 bg-white/5' : 'border border-gray-200 bg-white'}`}>
-                <div className={`mb-3 text-sm font-medium ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>FAQs</div>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Do you replace our EHR?</h4>
-                    <p className={`mt-1 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>No. Vukazine plugs into your existing EHR/billing via API, CSV, or SFTP.</p>
-                  </div>
-                  <div>
-                    <h4 className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>How fast is onboarding?</h4>
-                    <p className={`mt-1 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Small clinics are live in days; larger hospitals typically within a few weeks.</p>
-                  </div>
-                </div>
+            {/* Trust Indicators (styled as Compliance checklist) */}
+            <div id="faq" className={`flex flex-col justify-between rounded-2xl p-6 shadow-sm w-full min-h-[370px] border ${isDark ? 'bg-white/5 border-white/10 text-gray-200' : 'bg-white border-gray-200 text-gray-900'}`} style={{margin:'0'}}>
+              <div>
+                <h3 className={`mb-2 text-sm font-medium ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>Trust Indicators</h3>
+                <div className={`mb-4 text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Enterprise Security Standards</div>
+                <ul className="space-y-3 text-base font-medium">
+                  <li className="flex items-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-500 min-w-[18px] min-h-[18px]"><circle cx="11" cy="11" r="10" stroke="currentColor" strokeWidth="2"/><path d="M7 11l2.5 2.5L15 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    POPIA Ready
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-500 min-w-[18px] min-h-[18px]"><circle cx="11" cy="11" r="10" stroke="currentColor" strokeWidth="2"/><path d="M7 11l2.5 2.5L15 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    HIPAA Aligned
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-500 min-w-[18px] min-h-[18px]"><circle cx="11" cy="11" r="10" stroke="currentColor" strokeWidth="2"/><path d="M7 11l2.5 2.5L15 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    AES-256 Encryption
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-500 min-w-[18px] min-h-[18px]"><circle cx="11" cy="11" r="10" stroke="currentColor" strokeWidth="2"/><path d="M7 11l2.5 2.5L15 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    99.9% Uptime
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-emerald-500 min-w-[18px] min-h-[18px]"><circle cx="11" cy="11" r="10" stroke="currentColor" strokeWidth="2"/><path d="M7 11l2.5 2.5L15 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    Purpose-Built for Healthcare
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
       </section>
-      {/* Clinical Intelligence Feature Banner (Hero-themed) */}
-  <section id="why-our-service" className={`py-20 scroll-mt-24 ${isDark ? 'bg-black/95' : 'bg-white'}`}>
-        <div className="mx-auto max-w-7xl px-6 md:px-10">
-          <div className="mb-20 text-center">
-            <h2 className={`text-4xl md:text-5xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              Why Our Service
+      {/* Why Our Service - Alternating Layout */}
+  <section id="why-our-service" className={`scroll-mt-24 ${isDark ? 'bg-black/95' : 'bg-white'}`}>
+    
+    {/* SECTION 1: Image Right - 60/40 Split */}
+    <div className={`py-20 ${isDark ? 'bg-black/95' : 'bg-white'}`}>
+      <div className="mx-auto max-w-7xl px-6 md:px-10">
+        <div className="grid gap-12 lg:grid-cols-5 lg:items-center">
+          {/* Left: Content (60%) */}
+          <div className="lg:col-span-3">
+            <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium tracking-wide uppercase mb-6 ${isDark ? 'border border-emerald-400/30 bg-emerald-400/10 text-emerald-300' : 'border border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+              <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${isDark ? 'bg-emerald-400' : 'bg-emerald-500'}`} /> CLINICAL INTELLIGENCE
+            </div>
+            <h2 className={`text-4xl md:text-5xl font-extrabold tracking-tight leading-tight mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              Code Smarter. <span className={`${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>Get Paid Faster.</span>
             </h2>
+            <p className={`text-lg md:text-xl leading-relaxed mb-6 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              Stop billing denials at the source. We turn messy, unstructured clinical documentation into perfect, auditable claims before they ever leave your office.
+            </p>
+            <p className={`text-base leading-relaxed mb-8 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+              Our AI-powered platform analyzes clinical notes in real-time, suggesting accurate codes while flagging potential issues before submission. Your team stays in control, while our system learns and improves with every review.
+            </p>
+            <a href="#how-it-works" className={`inline-flex items-center justify-center rounded-xl px-8 py-4 text-base font-semibold transition-all duration-300 active:scale-95 ${isDark ? 'bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 text-black hover:brightness-110 shadow-lg' : 'bg-emerald-600 text-white shadow-lg hover:bg-emerald-700 hover:shadow-xl'}`}>
+              See How It Works
+            </a>
           </div>
-          <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
-            {/* Left Visual Panel */}
+
+          {/* Right: Image with Precision Badge (40%) */}
+          <div className="lg:col-span-2">
             <div className="relative group">
-              <div className={`relative overflow-hidden rounded-3xl shadow-xl ${isDark ? 'border border-white/10 bg-white/5' : 'border border-gray-200 bg-white'}`}>
-                {/* Replace with real artwork later */}
+              <div className={`relative overflow-hidden rounded-3xl shadow-2xl ${isDark ? 'border border-white/10 bg-white/5' : 'border border-gray-200 bg-white'}`}>
                 <div className="aspect-[4/5] w-full relative">
                   <img src="/image/billing/image2.jpg" alt="Billing intelligence" className="absolute inset-0 h-full w-full object-cover transition-opacity duration-1000" />
-                  {/* Floating mini cards */}
-                  <div className={`absolute top-6 left-6 rounded-xl px-4 py-3 text-xs flex items-center gap-2 animate-[float_8s_ease-in-out_infinite] shadow-sm ${isDark ? 'bg-black/70 border border-white/10 text-gray-200' : 'bg-white border border-gray-200 text-gray-700'}`}>
-                    <span className={`h-2 w-2 rounded-full animate-pulse ${isDark ? 'bg-emerald-400' : 'bg-emerald-500'}`} />
-                    ICD-10 Mapping Active
-                  </div>
-                  <div className={`absolute bottom-10 right-6 rounded-xl px-4 py-3 text-xs shadow-sm flex flex-col gap-1 animate-[float_7s_ease-in-out_infinite_reverse] ${isDark ? 'bg-black/70 border border-white/10 text-gray-200' : 'bg-white border border-gray-200 text-gray-700'}`}>
+                  {/* Precision Badge Overlay */}
+                  <div className={`absolute bottom-8 right-8 rounded-xl px-5 py-4 shadow-xl backdrop-blur-sm ${isDark ? 'bg-black/80 border border-white/20 text-gray-100' : 'bg-white/90 border border-gray-200 text-gray-800'}`}>
+                    <div className="text-xs font-medium mb-1">Coding Accuracy</div>
                     <AnimatedPrecision />
-                    <span className={`text-[10px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Last 7 days</span>
+                    <div className={`mt-1 text-[10px] ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Last 7 days</div>
                   </div>
-                  <div className={`absolute bottom-1/2 left-1/2 -translate-x-1/2 translate-y-1/2 rounded-xl px-5 py-3 text-sm font-medium shadow-sm ${isDark ? 'bg-emerald-500/15 border border-emerald-300/30 text-emerald-100' : 'bg-emerald-50 border border-emerald-200 text-emerald-800'}`}>
-                    <div className="flex items-center gap-2">
-                      <span>Claim Risk Scan</span>
-                      <span className={`h-2 w-2 rounded-full animate-pulse ${isDark ? 'bg-emerald-400' : 'bg-emerald-500'}`} />
-                    </div>
-                    <div className={`mt-2 h-1.5 w-40 overflow-hidden rounded-full ${isDark ? 'bg-emerald-900/40' : 'bg-emerald-100'}`}>
-                      <div className={`h-full w-full origin-left animate-[scan_12s_linear_infinite] [background-size:200%_100%] ${isDark ? 'bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-500' : 'bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600'}`} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* SECTION 2: Full-Width 4-Column Feature Cards */}
+    <div className={`py-20 ${isDark ? 'bg-gradient-to-b from-black/95 to-gray-900' : 'bg-gradient-to-b from-gray-50 to-white'}`}>
+      <div className="mx-auto max-w-7xl px-6 md:px-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {[
+            {
+              title: 'Zero-Error Prevention',
+              desc: "Flag and fix risky claims before they're ever submitted to the payer.",
+              icon: (
+                <svg className='h-12 w-12' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' viewBox='0 0 24 24'><path d='M12 3l7 4v5.2c0 4.2-2.8 8-7 9-4.2-1-7-4.8-7-9V7l7-4z'/><path d='M9.5 12.5l2 2 3.5-4'/></svg>
+              ),
+            },
+            {
+              title: 'Precision Coding',
+              desc: 'Generate perfect ICD-10 / CPT codes with full rationale for every suggestion.',
+              icon: (
+                <svg className='h-12 w-12' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round'><path d='M5 3l1.8 4.2L11 9 6.8 10.8 5 15l-1.8-4.2L-1 9l4.2-1.8L5 3z'/><path d='M16 13l1 2.2L20 16l-3 1-1 3-1-3-3-1 3-.8L16 13z'/><path d='M14 3l.6 1.4L16 5l-1.4.6L14 7l-.6-1.4L12 5l1.4-.6L14 3z'/></svg>
+              ),
+            },
+            {
+              title: 'Seamless Integration',
+              desc: 'Plug into your EHR/billing system via API, CSV, or SFTP sync in days.',
+              icon: (
+                <svg className='h-12 w-12' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' viewBox='0 0 24 24'><path d='M10.5 13.5l3-3'/><path d='M8 12a4 4 0 010-5.7l2.3-2.3a4 4 0 015.7 5.7l-.7.7'/><path d='M16 12a4 4 0 010 5.7l-2.3 2.3a4 4 0 01-5.7-5.7l.7-.7'/></svg>
+              ),
+            },
+            {
+              title: 'Human-in-the-Loop',
+              desc: 'Your coders keep control while the system learns from their expertise.',
+              icon: (
+                <svg className='h-12 w-12' fill='none' stroke='currentColor' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' viewBox='0 0 24 24'><path d='M16 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2'/><circle cx='9' cy='7' r='4'/><path d='M16.5 11.5l1.5 1.5 3-3'/></svg>
+              ),
+            },
+          ].map((feature, index) => (
+            <div
+              key={index}
+              className={`group relative overflow-hidden rounded-2xl p-8 transition-all duration-300 flex flex-col items-center text-center ${
+                isDark 
+                  ? 'bg-white/5 border border-white/10 hover:bg-white/10 hover:border-emerald-400/50 hover:shadow-2xl hover:shadow-emerald-500/20 hover:-translate-y-3' 
+                  : 'bg-white border border-gray-200 shadow-lg hover:border-emerald-400 hover:shadow-2xl hover:-translate-y-3'
+              }`}
+            >
+              <div className={`flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-xl mb-5 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 ${isDark ? 'ring-2 ring-white/20' : 'ring-2 ring-emerald-200/50'}`}>
+                {feature.icon}
+              </div>
+              <h4 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-gray-900'}`}>{feature.title}</h4>
+              <p className={`text-sm leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{feature.desc}</p>
+              <div className={`pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 rounded-2xl ${isDark ? 'bg-gradient-to-br from-emerald-500/10 via-emerald-400/5 to-transparent' : 'bg-gradient-to-br from-emerald-50 via-emerald-100/50 to-transparent'}`} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    {/* SECTION 3: Optional - Image Left (Placeholder for future content) */}
+    <div className={`py-20 ${isDark ? 'bg-black/95' : 'bg-white'}`}>
+      <div className="mx-auto max-w-7xl px-6 md:px-10">
+        <div className="grid gap-12 lg:grid-cols-5 lg:items-center">
+          {/* Left: Screenshot/Dashboard Placeholder (40%) */}
+          <div className="lg:col-span-2 order-2 lg:order-1">
+            <div className="relative group">
+              <div className={`relative overflow-hidden rounded-3xl shadow-2xl ${isDark ? 'border border-white/10 bg-white/5' : 'border border-gray-200 bg-white'}`}>
+                <div className="aspect-[4/3] w-full relative">
+                  {/* Placeholder for platform screenshot */}
+                  <div className={`absolute inset-0 flex items-center justify-center ${isDark ? 'bg-gradient-to-br from-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-100 to-gray-200'}`}>
+                    <div className="text-center p-8">
+                      <svg className={`h-16 w-16 mx-auto mb-4 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} fill='none' stroke='currentColor' strokeWidth='1.5' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/><path d='M3 9h18'/><path d='M9 21V9'/></svg>
+                      <p className={`text-sm font-medium ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>Platform Dashboard Preview</p>
+                      <p className={`text-xs mt-2 ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>Coming soon</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Right Content */}
-            <div>
-              <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium tracking-wide uppercase mb-6 ${isDark ? 'border border-emerald-400/30 bg-emerald-400/10 text-emerald-300' : 'border border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
-                <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${isDark ? 'bg-emerald-400' : 'bg-emerald-500'}`} /> Clinical Intelligence
-              </div>
-              <h2 className={`text-4xl md:text-5xl font-extrabold tracking-tight leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                Code Smarter. <span className={`${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>Get Paid Faster.</span>
-              </h2>
-              <p className={`mt-6 text-lg md:text-xl leading-relaxed max-w-xl ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                Stop billing denials at the source. We turn messy, unstructured clinical documentation into perfect, auditable claims before they ever leave your office.
-              </p>
-              <div className="mt-10 grid gap-6 sm:grid-cols-2">
-                {[
-                  {title:'Zero-Error Prevention',desc:'Flag and fix risky claims before they are ever submitted to the payer.',icon:(
-                    <svg className='h-5 w-5' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' viewBox='0 0 24 24'><path d='M12 3l7 4v5.2c0 4.2-2.8 8-7 9-4.2-1-7-4.8-7-9V7l7-4z'/><path d='M9.5 12.5l2 2 3.5-4'/></svg>
-                  )},
-                  {title:'Precision Coding',desc:'Generate perfect ICD-10 / CPT codes with full rationale for every suggestion.',icon:(
-                    <svg className='h-5 w-5' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round'><path d='M5 3l1.8 4.2L11 9 6.8 10.8 5 15l-1.8-4.2L-1 9l4.2-1.8L5 3z'/><path d='M16 13l1 2.2L20 16l-3 1-1 3-1-3-3-1 3-.8L16 13z'/><path d='M14 3l.6 1.4L16 5l-1.4.6L14 7l-.6-1.4L12 5l1.4-.6L14 3z'/></svg>
-                  )},
-                  {title:'Seamless Integration',desc:'Plug into your EHR/billing system via API, CSV, or SFTP sync in days.',icon:(
-                    <svg className='h-5 w-5' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' viewBox='0 0 24 24'><path d='M10.5 13.5l3-3'/><path d='M8 12a4 4 0 010-5.7l2.3-2.3a4 4 0 015.7 5.7l-.7.7'/><path d='M16 12a4 4 0 010 5.7l-2.3 2.3a4 4 0 01-5.7-5.7l.7-.7'/></svg>
-                  )},
-                  {title:'Human-in-the-Loop',desc:'Your coders keep control; the system learns from their expertise with every cycle.',icon:(
-                    <svg className='h-5 w-5' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' viewBox='0 0 24 24'><path d='M16 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2'/><circle cx='9' cy='7' r='4'/><path d='M16.5 11.5l1.5 1.5 3-3'/></svg>
-                  )},
-                ].map((f,i)=>(
-                  <div key={i} className={`group relative overflow-hidden rounded-xl p-5 transition-all duration-300 ${isDark ? 'border border-white/10 bg-white/5 hover:border-emerald-400/40 hover:bg-emerald-400/10' : 'border border-gray-200 bg-white shadow-sm hover:border-emerald-300 hover:bg-emerald-50/30'}` }>
-                    <div className="flex items-start gap-3">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-inner ${isDark ? 'ring-1 ring-white/20' : 'ring-1 ring-emerald-200/50'}` }>
-                        {f.icon}
-                      </div>
-                      <div>
-                        <h4 className={`text-base font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{f.title}</h4>
-                        <p className={`mt-1 text-sm leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{f.desc}</p>
-                      </div>
-                    </div>
-                    <div className={`pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 ${isDark ? 'bg-gradient-to-br from-emerald-300/0 via-emerald-300/10 to-teal-300/10' : 'bg-gradient-to-br from-emerald-200/0 via-emerald-200/20 to-teal-200/10'}`} />
+          {/* Right: Additional Benefits / Testimonial Space (60%) */}
+          <div className="lg:col-span-3 order-1 lg:order-2">
+            <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium tracking-wide uppercase mb-6 ${isDark ? 'border border-emerald-400/30 bg-emerald-400/10 text-emerald-300' : 'border border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+              <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${isDark ? 'bg-emerald-400' : 'bg-emerald-500'}`} /> BUILT FOR HEALTHCARE
+            </div>
+            <h3 className={`text-3xl md:text-4xl font-extrabold tracking-tight leading-tight mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              Enterprise-Ready from Day One
+            </h3>
+            <p className={`text-lg leading-relaxed mb-8 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              Built with healthcare compliance at its core. POPIA-ready, HIPAA-aligned, and designed for the demanding requirements of modern medical practices.
+            </p>
+            <div className="space-y-4">
+              {[
+                { label: 'Role-based access control', sublabel: 'Granular permissions for your entire team' },
+                { label: 'Full audit trails', sublabel: 'Track every change, every review, every decision' },
+                { label: 'Data locality controls', sublabel: 'Your data stays where you need it: EU, SA, or US' },
+              ].map((benefit, idx) => (
+                <div key={idx} className={`flex items-start gap-4 p-4 rounded-xl transition-colors ${isDark ? 'hover:bg-white/5' : 'hover:bg-gray-50'}`}>
+                  <div className={`flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex-shrink-0`}>
+                    <svg className='h-5 w-5' fill='none' stroke='currentColor' strokeWidth='2.5' strokeLinecap='round' strokeLinejoin='round' viewBox='0 0 24 24'><path d='M5 13l4 4L19 7'/></svg>
                   </div>
-                ))}
-              </div>
-              <div className="mt-12 flex flex-col sm:flex-row gap-4">
-                <a href="#book" className={`inline-flex items-center justify-center rounded-xl px-8 py-4 text-sm font-semibold transition active:scale-95 ${isDark ? 'bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 text-black hover:brightness-105' : 'bg-emerald-600 text-white shadow-sm hover:bg-emerald-700'}`}>
-                  Book a Demo
-                </a>
-                {/* Pricing CTA removed per request */}
-              </div>
+                  <div>
+                    <div className={`text-base font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{benefit.label}</div>
+                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{benefit.sublabel}</div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+
+  </section>
 
       {/* Trust Logos removed per request */}
 
+      {/* Link to FAQ page before Get started section */}
+      <div className="py-10 text-center">
+        <a href="/faqs" className={`inline-block rounded-xl px-6 py-3 text-lg font-semibold transition active:scale-95 ${isDark ? 'bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 text-black hover:brightness-105' : 'bg-emerald-600 text-white shadow-sm hover:bg-emerald-700'}`}>View All FAQs</a>
+      </div>
       {/* How it works — themable */}
   <section id="how-it-works" className={`py-20 scroll-mt-24 ${isDark ? 'bg-black/95' : 'bg-white'}`}>
         <div className="mx-auto max-w-7xl px-6 md:px-10">
@@ -573,7 +660,7 @@ export default function LandingPage() {
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
-              { step: '1', title: 'Connect Securely', body: 'No EHR replacement. We integrate via API or file export in days.' },
+              { step: '1', title: 'Connect Securely', body: 'No EHR replacement required. We integrate securely via API, CSV, or SFTP file export in days.' },
               { step: '2', title: 'Analyze Notes', body: 'Clinical intelligence securely parses and normalizes your documentation.' },
               { step: '3', title: 'Suggest & Flag', body: 'Accurate ICD‑10/CPT codes are suggested, with red flags on risks and missing info.' },
               { step: '4', title: 'Finalize & Export', body: 'Your coders review/approve in the system, then export the clean claim.' }
@@ -613,15 +700,17 @@ export default function LandingPage() {
                 <li>Role‑based access control and SSO support</li>
                 <li>POPIA/HIPAA‑aligned data handling</li>
                 <li>On‑prem or VPC deployment available</li>
+                <li>Regular security audits and penetration testing</li>
               </ul>
             </div>
             <div className={`rounded-2xl p-6 shadow-sm ${isDark ? 'border border-white/10 bg-white/5 text-gray-200' : 'border border-gray-200 bg-white text-gray-800'}`}>
               <div className={`mb-2 text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Compliance checklist</div>
               <ul className={`space-y-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                 <li>☑ Data minimisation</li>
-                <li>☑ Access logging</li>
+                <li>☑ Access logging and full audit trails</li>
                 <li>☑ PHI pseudonymisation options</li>
                 <li>☑ Data locality controls (EU/SA/US)</li>
+                <li>☑ SOC 2 Type II compliant</li>
               </ul>
               <a href="#book" className={`mt-6 inline-block rounded-xl px-4 py-2 text-sm font-semibold ${isDark ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:brightness-110' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}>Contact us for security details</a>
             </div>
@@ -660,118 +749,112 @@ export default function LandingPage() {
                 </div>
               )}
 
-              <form className="space-y-4" onSubmit={handleSubmit}>
-                <div>
-                  <label htmlFor="fullName" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="fullName"
-                    name="fullName"
-                    required
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    disabled={isSubmitting}
-                    className={`w-full rounded-lg px-3 py-2 placeholder:text-gray-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:cursor-not-allowed ${isDark ? 'border border-white/10 bg-white/5 text-white disabled:bg-white/10' : 'border border-gray-300 bg-white text-gray-900 disabled:bg-gray-100'}`}
-                    placeholder="Enter your full name"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    disabled={isSubmitting}
-                    className={`w-full rounded-lg px-3 py-2 placeholder:text-gray-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:cursor-not-allowed ${isDark ? 'border border-white/10 bg-white/5 text-white disabled:bg-white/10' : 'border border-gray-300 bg-white text-gray-900 disabled:bg-gray-100'}`}
-                    placeholder="your.email@clinic.com"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="phone" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-                    Contact Number *
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    required
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    disabled={isSubmitting}
-                    className={`w-full rounded-lg px-3 py-2 placeholder:text-gray-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:cursor-not-allowed ${isDark ? 'border border-white/10 bg-white/5 text-white disabled:bg-white/10' : 'border border-gray-300 bg-white text-gray-900 disabled:bg-gray-100'}`}
-                    placeholder="+27 XX XXX XXXX"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="organization" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-                    Clinic/Hospital Name
-                  </label>
-                  <input
-                    type="text"
-                    id="organization"
-                    name="organization"
-                    value={formData.organization}
-                    onChange={handleInputChange}
-                    disabled={isSubmitting}
-                    className={`w-full rounded-lg px-3 py-2 placeholder:text-gray-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:cursor-not-allowed ${isDark ? 'border border-white/10 bg-white/5 text-white disabled:bg-white/10' : 'border border-gray-300 bg-white text-gray-900 disabled:bg-gray-100'}`}
-                    placeholder="Your clinic or hospital name"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="message" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>
-                    How can we help? (Optional)
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={3}
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    disabled={isSubmitting}
-                    className={`w-full rounded-lg px-3 py-2 placeholder:text-gray-400 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:cursor-not-allowed ${isDark ? 'border border-white/10 bg-white/5 text-white disabled:bg-white/10' : 'border border-gray-300 bg-white text-gray-900 disabled:bg-gray-100'}`}
-                    placeholder="Tell us about your current coding challenges..."
-                  ></textarea>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full rounded-lg px-4 py-3 font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center ${isDark ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white hover:brightness-110' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Sending...
-                    </>
-                  ) : (
-                    'Submit Details'
-                  )}
-                </button>
-
-                <p className={`text-xs text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                  We respect your privacy. Your information will only be used to contact you about Vukazine services.
-                </p>
-              </form>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label htmlFor="fullName" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>Full Name *</label>
+                    <input type="text" id="fullName" name="fullName" required value={formData.fullName} onChange={handleInputChange} className={`w-full rounded-lg px-3 py-2 placeholder:text-gray-400 border ${isDark ? 'border-white/10 bg-white/5 text-white focus:border-emerald-500' : 'border-gray-300 bg-white text-gray-900 focus:border-emerald-500'} focus:outline-none focus:ring-2 focus:ring-emerald-500/50`} placeholder="Enter your full name" />
+                  </div>
+                  <div>
+                    <label htmlFor="email" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>Email Address *</label>
+                    <input type="email" id="email" name="email" required value={formData.email} onChange={handleInputChange} className={`w-full rounded-lg px-3 py-2 placeholder:text-gray-400 border ${isDark ? 'border-white/10 bg-white/5 text-white focus:border-emerald-500' : 'border-gray-300 bg-white text-gray-900 focus:border-emerald-500'} focus:outline-none focus:ring-2 focus:ring-emerald-500/50`} placeholder="your.email@hospital.com" />
+                  </div>
+                  <div>
+                    <label htmlFor="phone" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>Contact Number *</label>
+                    <input type="tel" id="phone" name="phone" required value={formData.phone} onChange={handleInputChange} className={`w-full rounded-lg px-3 py-2 placeholder:text-gray-400 border ${isDark ? 'border-white/10 bg-white/5 text-white focus:border-emerald-500' : 'border-gray-300 bg-white text-gray-900 focus:border-emerald-500'} focus:outline-none focus:ring-2 focus:ring-emerald-500/50`} placeholder="+27 XX XXX XXXX" />
+                  </div>
+                  <div>
+                    <label htmlFor="organization" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>Clinic/Hospital Name</label>
+                    <input type="text" id="organization" name="organization" value={formData.organization} onChange={handleInputChange} className={`w-full rounded-lg px-3 py-2 placeholder:text-gray-400 border ${isDark ? 'border-white/10 bg-white/5 text-white focus:border-emerald-500' : 'border-gray-300 bg-white text-gray-900 focus:border-emerald-500'} focus:outline-none focus:ring-2 focus:ring-emerald-500/50`} placeholder="Your clinic or hospital name" />
+                  </div>
+                  <div>
+                    <label htmlFor="message" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-200' : 'text-gray-700'}`}>How can we help? (Optional)</label>
+                    <textarea id="message" name="message" rows={3} value={formData.message} onChange={handleInputChange} className={`w-full rounded-lg px-3 py-2 placeholder:text-gray-400 border ${isDark ? 'border-white/10 bg-white/5 text-white focus:border-emerald-500' : 'border-gray-300 bg-white text-gray-900 focus:border-emerald-500'} focus:outline-none focus:ring-2 focus:ring-emerald-500/50`} placeholder="Tell us about your current coding challenges..." />
+                  </div>
+                  <button type="submit" className={`w-full rounded-lg px-4 py-3 font-medium flex items-center justify-center transition-colors ${isSubmitting ? 'bg-gray-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700'} text-white`} disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Request Demo'}</button>
+                  <p className={`text-xs text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>By submitting this form, you agree to our{' '}
+                    <button 
+                      type="button"
+                      onClick={() => setShowPrivacyModal(true)}
+                      className={`underline hover:no-underline ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}
+                    >
+                      Privacy Policy
+                    </button>.
+                  </p>
+                </form>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Privacy Policy Modal */}
+      {showPrivacyModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => setShowPrivacyModal(false)}>
+          <div className={`max-w-2xl w-full rounded-xl shadow-2xl p-6 max-h-[80vh] overflow-y-auto ${isDark ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900'}`} onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-start mb-4">
+              <h2 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Privacy Policy</h2>
+              <button 
+                onClick={() => setShowPrivacyModal(false)}
+                className={`text-2xl font-bold hover:opacity-70 transition-opacity ${isDark ? 'text-gray-400' : 'text-gray-500'}`}
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className={`space-y-4 text-sm leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+              <p>
+                <strong className={isDark ? 'text-yellow-400' : 'text-yellow-700'}>Last updated: 9 October 2025</strong>
+              </p>
+              
+              <div>
+                <h3 className={`font-bold text-base mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Beta Testing Phase</h3>
+                <p>Vukazine is currently validating market demand before official registration.</p>
+              </div>
+
+              <div>
+                <h3 className={`font-bold text-base mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>What we collect</h3>
+                <p>Name, email, phone, clinic name, and your inquiry details.</p>
+              </div>
+
+              <div>
+                <h3 className={`font-bold text-base mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>How we use it</h3>
+                <p>To contact you about Vukazine and schedule a personalized demo to understand your coding challenges.</p>
+              </div>
+
+              <div>
+                <h3 className={`font-bold text-base mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Storage</h3>
+                <p>Your information is sent directly to our team via secure email and stored only in our email system. Data stays in South Africa.</p>
+              </div>
+
+              <div>
+                <h3 className={`font-bold text-base mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Your rights</h3>
+                <p>Request deletion anytime at <a href="mailto:info@vukazine.com" className={`underline hover:no-underline ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>info@vukazine.com</a>.</p>
+              </div>
+
+              <div>
+                <h3 className={`font-bold text-base mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>Next steps</h3>
+                <p>Once we validate demand with clinics like yours, we&apos;ll officially register Vukazine (Pty) Ltd and publish a full POPIA-compliant Privacy Policy.</p>
+              </div>
+
+              <div className={`mt-6 pt-4 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+                <p className={`font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>Questions?</p>
+                <p className="mt-1">Contact us at <a href="mailto:info@vukazine.com" className={`underline hover:no-underline ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>info@vukazine.com</a></p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button 
+                onClick={() => setShowPrivacyModal(false)}
+                className={`px-6 py-2 rounded-lg font-medium transition-colors ${isDark ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-emerald-600 hover:bg-emerald-700'} text-white`}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Footer removed per request */}
+      </div>
     </div>
   );
 }
