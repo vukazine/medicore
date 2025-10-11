@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { sendEmail } from '@/lib/emailjs'
 
 // TypewriterText Component
 const TypewriterText = ({ phrases }: { phrases: string[] }) => {
@@ -182,19 +183,11 @@ export default function LandingPage() {
     setSubmitMessage('')
 
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      })
+      const result = await sendEmail(formData)
 
-      const data = await response.json()
-
-      if (data.success) {
+      if (result.success) {
         setIsSuccess(true)
-        setSubmitMessage(data.message)
+        setSubmitMessage(result.message)
         // Reset form
         setFormData({
           fullName: '',
@@ -205,7 +198,7 @@ export default function LandingPage() {
         })
       } else {
         setIsSuccess(false)
-        setSubmitMessage(data.error || 'Something went wrong. Please try again.')
+        setSubmitMessage(result.message || 'Something went wrong. Please try again.')
       }
     } catch (error) {
       setIsSuccess(false)
