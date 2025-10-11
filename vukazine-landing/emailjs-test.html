@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmailJS Test</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+    <h1>EmailJS Test Form</h1>
+    <form id="contact-form">
+        <label for="fullName">Full Name:</label>
+        <input type="text" id="fullName" name="fullName" required><br><br>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" required><br><br>
+        
+        <label for="organization">Organization:</label>
+        <input type="text" id="organization" name="organization"><br><br>
+        
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4"></textarea><br><br>
+        
+        <button type="submit">Send Email</button>
+    </form>
+
+    <script type="text/javascript">
+        (function(){
+            emailjs.init({
+                publicKey: "oVV84c6cn-Y2Y7I7V",
+            });
+        })();
+
+        document.getElementById('contact-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const templateParams = {
+                from_name: formData.get('fullName'),
+                from_email: formData.get('email'),
+                phone: formData.get('phone'),
+                organization: formData.get('organization'),
+                message: formData.get('message'),
+                to_email: 'info@vukazine.com'
+            };
+
+            emailjs.send('service_n6poqut', 'template_umuudte', templateParams)
+                .then(function(response) {
+                    console.log('SUCCESS!', response.status, response.text);
+                    alert('Email sent successfully!');
+                    event.target.reset();
+                }, function(error) {
+                    console.log('FAILED...', error);
+                    alert('Failed to send email: ' + error.text);
+                });
+        });
+    </script>
+</body>
+</html>
