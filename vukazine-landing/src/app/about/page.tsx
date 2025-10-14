@@ -104,7 +104,6 @@ export default function AboutPage() {
           <nav className="hidden md:flex items-center space-x-6">
             <Link href="/#why-our-service" className="text-gray-300 hover:text-white">Why Our Service</Link>
             <Link href="/#how-it-works" className="text-gray-300 hover:text-white">How It Works</Link>
-            <Link href="/#faq" className="text-gray-300 hover:text-white">FAQ</Link>
             <Link href="/about" className="text-white font-medium">About Us</Link>
           </nav>
           <div className="hidden md:flex items-center space-x-5 ml-10 pl-10 border-l border-white/10">
@@ -122,60 +121,112 @@ export default function AboutPage() {
       {/* Spacer for fixed header */}
       <div className="h-16" />
 
-      {/* Hero Section (copied from main page) */}
-      <section className="relative bg-black overflow-hidden min-h-[60vh] md:min-h-screen">
-        {/* Background Images Carousel */}
-        <div className="absolute inset-0">
-          {heroImages.map((image, index) => (
-            <div
-              key={index}
-              className={`absolute inset-0 transition-opacity duration-1000 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'}`}
-            >
-              <img src={image} alt={`Doctor ${index + 1}`} className="h-full w-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/80"></div>
-            </div>
-          ))}
+      {/* Redesigned Hero Section - Modern Minimal Design */}
+      <section className={`relative overflow-hidden ${isDark ? 'bg-gradient-to-br from-gray-900 via-black to-gray-900' : 'bg-gradient-to-br from-gray-50 via-white to-emerald-50'}`}>
+        {/* Geometric Background Pattern */}
+        <div className="absolute inset-0 opacity-30">
+          <div className={`absolute top-20 left-10 w-32 h-32 rounded-full ${isDark ? 'bg-emerald-400/10' : 'bg-emerald-500/10'} blur-xl`}></div>
+          <div className={`absolute top-40 right-20 w-48 h-48 rounded-full ${isDark ? 'bg-blue-400/10' : 'bg-blue-500/10'} blur-xl`}></div>
+          <div className={`absolute bottom-20 left-1/3 w-40 h-40 rounded-full ${isDark ? 'bg-purple-400/10' : 'bg-purple-500/10'} blur-xl`}></div>
         </div>
-        {/* Content Overlay */}
-        <div className="relative z-10 flex min-h-[60vh] md:min-h-screen items-center pt-24">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="max-w-3xl">
-              <h1 className="text-4xl font-bold leading-tight text-white md:text-6xl">Eliminate Billing Denials. Accelerate Revenue.</h1>
-              <p className="mt-4 text-xl text-gray-200 md:text-2xl">
-                <TypewriterText phrases={["Our Code is Clear", "Zero Denials", "Faster Payments"]} />
+
+        <div className="relative z-10 mx-auto max-w-7xl px-6 py-24 md:py-32">
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            {/* Left Column - Content */}
+            <div className="space-y-8">
+              <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isDark ? 'bg-emerald-400/10 text-emerald-300 border border-emerald-400/20' : 'bg-emerald-100 text-emerald-700 border border-emerald-200'}`}>
+                <span className={`h-2 w-2 rounded-full ${isDark ? 'bg-emerald-400' : 'bg-emerald-500'} animate-pulse`}></span>
+                Our Story
+              </div>
+              
+              <div>
+                <h1 className={`text-5xl md:text-6xl font-bold leading-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  Building the Future of
+                  <span className="block">
+                    <TypewriterText phrases={["Medical Coding", "Healthcare Revenue", "Clinical Intelligence"]} />
+                  </span>
+                </h1>
+              </div>
+
+              <p className={`text-xl leading-relaxed ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+                Founded in South Africa with a global vision: to eliminate the administrative burden that pulls healthcare professionals away from patient care.
               </p>
-              <div className="mt-6 max-w-2xl relative">
-                <div className="absolute -left-4 top-0 w-1 h-full bg-gradient-to-b from-emerald-400 to-transparent rounded-full"></div>
-                <p className="text-lg md:text-xl font-medium leading-relaxed text-gray-100 backdrop-blur-sm bg-white/5 p-6 rounded-lg border border-white/10 shadow-xl">
-                  <span className="text-emerald-400 font-semibold">Vukazine</span> uses{' '}
-                  <span className="font-semibold text-white">clinical intelligence</span> to suggest{' '}
-                  <span className="font-semibold text-white">perfect codes</span> and{' '}
-                  <span className="font-semibold text-white">flag risks</span> before you submit.{' '}
-                  <span className="block mt-2 text-emerald-300 font-semibold">It's guaranteed precision that pays for itself.</span>
-                </p>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link 
+                  href="/#book" 
+                  className={`inline-flex items-center justify-center px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 active:scale-95 ${isDark ? 'bg-gradient-to-r from-emerald-400 to-emerald-500 text-black hover:brightness-110' : 'bg-emerald-600 text-white hover:bg-emerald-700'} shadow-lg hover:shadow-xl`}
+                >
+                  Meet Our Team
+                </Link>
+                <Link 
+                  href="/#how-it-works" 
+                  className={`inline-flex items-center justify-center px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 active:scale-95 ${isDark ? 'border border-white/20 bg-white/5 text-white hover:bg-white/10' : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'} backdrop-blur-sm`}
+                >
+                  See Our Solution
+                </Link>
               </div>
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-                <Link href="/savings-estimator" className="rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-500 px-6 py-4 text-center text-lg font-medium text-black hover:from-emerald-500 hover:to-emerald-600 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-400/20 active:scale-95">Calculate My Savings</Link>
-                <Link href="/#how-it-works" className="rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm px-6 py-4 text-center text-lg font-medium text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 hover:shadow-lg hover:shadow-white/5 active:scale-95 flex items-center justify-center gap-2"><span className="text-emerald-400">▶</span> Watch the 90-Second Demo</Link>
+
+              {/* Stats Row */}
+              <div className="grid grid-cols-3 gap-6 pt-8 border-t border-gray-200/20">
+                <div className="text-center">
+                  <div className={`text-2xl font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>2024</div>
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Founded</div>
+                </div>
+                <div className="text-center">
+                  <div className={`text-2xl font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>99.9%</div>
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Accuracy</div>
+                </div>
+                <div className="text-center">
+                  <div className={`text-2xl font-bold ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>24/7</div>
+                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Support</div>
+                </div>
               </div>
-              <div className="mt-8 flex items-center gap-6 text-sm text-gray-300">
-                <div>⏱ Setup in Days</div>
-                <div>🔒 HIPAA Compliant</div>
-                <div>🧪 2-Week Performance Guarantee</div>
+            </div>
+
+            {/* Right Column - Visual Element */}
+            <div className="relative">
+              <div className={`relative rounded-3xl overflow-hidden shadow-2xl ${isDark ? 'bg-white/5 border border-white/10' : 'bg-white border border-gray-200'}`}>
+                {/* Animated Code Editor Mockup */}
+                <div className={`p-6 ${isDark ? 'bg-gray-900/50' : 'bg-gray-50'}`}>
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    <div className={`ml-4 text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Vukazine Clinical Intelligence</div>
+                  </div>
+                  
+                  <div className="space-y-3 font-mono text-sm">
+                    <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <span className="text-blue-500">function</span> <span className="text-green-500">analyzeClinicalNote</span>() {`{`}
+                    </div>
+                    <div className={`pl-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <span className="text-purple-500">const</span> diagnosis = <span className="text-yellow-500">"Type 2 Diabetes"</span>;
+                    </div>
+                    <div className={`pl-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <span className="text-purple-500">const</span> suggestedCode = <span className="text-green-500">getICD10Code</span>(diagnosis);
+                    </div>
+                    <div className={`pl-4 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <span className="text-blue-500">return</span> {`{`} code: <span className="text-yellow-500">"E11.9"</span>, confidence: <span className="text-orange-500">99.9</span> {`}`};
+                    </div>
+                    <div className={`${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{`}`}</div>
+                  </div>
+                  
+                  <div className={`mt-4 p-3 rounded-lg ${isDark ? 'bg-emerald-900/30 border border-emerald-500/30' : 'bg-emerald-50 border border-emerald-200'}`}>
+                    <div className={`text-xs font-medium ${isDark ? 'text-emerald-300' : 'text-emerald-700'}`}>✓ Code Verified • Zero Denials • Ready to Submit</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floating Elements */}
+              <div className={`absolute -top-6 -right-6 w-24 h-24 rounded-full ${isDark ? 'bg-gradient-to-br from-emerald-400 to-emerald-600' : 'bg-gradient-to-br from-emerald-500 to-emerald-700'} flex items-center justify-center shadow-xl`}>
+                <span className="text-2xl">🎯</span>
+              </div>
+              <div className={`absolute -bottom-4 -left-4 w-20 h-20 rounded-full ${isDark ? 'bg-gradient-to-br from-blue-400 to-blue-600' : 'bg-gradient-to-br from-blue-500 to-blue-700'} flex items-center justify-center shadow-xl`}>
+                <span className="text-xl">⚡</span>
               </div>
             </div>
           </div>
-        </div>
-        {/* Carousel indicators */}
-        <div className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 space-x-3">
-          {heroImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentImageIndex(index)}
-              className={`h-3 w-3 rounded-full transition-colors ${index === currentImageIndex ? 'bg-white' : 'bg-white/50'}`}
-              aria-label={`Go to image ${index + 1}`}
-            />
-          ))}
         </div>
       </section>
 

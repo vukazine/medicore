@@ -102,7 +102,6 @@ export default function LandingPage() {
   const navItems = [
     { title: 'Why Our Service', href: '/#why-our-service' },
     { title: 'How It Works', href: '/#how-it-works' },
-    { title: 'FAQ', href: '/#faq' },
     { title: 'About Us', href: '/about' }
   ]
 
@@ -219,9 +218,9 @@ export default function LandingPage() {
               <span className="ml-3 text-lg font-bold bg-gradient-to-r from-emerald-400 to-emerald-300 bg-clip-text text-transparent">Vukazine</span>
             </a>
             
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center">
-              <nav className="flex items-center space-x-6">
+            {/* Desktop Navigation - Centered */}
+            <div className="hidden md:flex items-center justify-center flex-1">
+              <nav className="flex items-center space-x-8">
                 {navItems.map((item, index) => (
                   <a
                     key={index}
@@ -232,31 +231,31 @@ export default function LandingPage() {
                   </a>
                 ))}
               </nav>
-              
-              {/* Theme toggle + Auth buttons */}
-              <div className="flex items-center space-x-5 ml-10 pl-10 border-l border-white/10">
-                <button
-                  type="button"
-                  onClick={() => setTheme(t => (t === 'light' ? 'dark' : 'light'))}
-                  className="rounded-lg px-3 py-2 text-[15px] font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
-                  aria-label="Toggle theme"
-                  title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
-                >
-                  {isDark ? '☀️ Light' : '🌙 Dark'}
-                </button>
-                <a
-                  href="#signin"
-                  className="text-gray-300 hover:text-white px-3 py-2 text-[15px] font-medium transition-colors duration-200 hover:bg-white/5 rounded-md"
-                >
-                  Sign in
-                </a>
-                <a
-                  href="#demo"
-                  className="bg-gradient-to-r from-emerald-400 to-emerald-500 text-black hover:from-emerald-500 hover:to-emerald-600 px-5 py-2 text-[15px] font-medium rounded-lg transition-all duration-200 hover:shadow-emerald-400/20 hover:shadow-lg active:scale-95"
-                >
-                  Demo
-                </a>
-              </div>
+            </div>
+            
+            {/* Theme toggle + Auth buttons */}
+            <div className="hidden md:flex items-center space-x-5">
+              <button
+                type="button"
+                onClick={() => setTheme(t => (t === 'light' ? 'dark' : 'light'))}
+                className="rounded-lg px-3 py-2 text-[15px] font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
+                aria-label="Toggle theme"
+                title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+              >
+                {isDark ? '☀️ Light' : '🌙 Dark'}
+              </button>
+              <a
+                href="/login"
+                className="text-gray-300 hover:text-white px-3 py-2 text-[15px] font-medium transition-colors duration-200 hover:bg-white/5 rounded-md"
+              >
+                Sign in
+              </a>
+              <a
+                href="#book"
+                className="bg-gradient-to-r from-emerald-400 to-emerald-500 text-black hover:from-emerald-500 hover:to-emerald-600 px-5 py-2 text-[15px] font-medium rounded-lg transition-all duration-200 hover:shadow-emerald-400/20 hover:shadow-lg active:scale-95"
+              >
+                Demo
+              </a>
             </div>
 
             {/* Mobile menu button */}
@@ -303,14 +302,14 @@ export default function LandingPage() {
                   ))}
                   <div className="border-t border-white/10 my-3"></div>
                   <a
-                    href="#signin"
+                    href="/login"
                     className="block px-3 py-2.5 text-[15px] font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Sign in
                   </a>
                   <a
-                    href="#demo"
+                    href="#book"
                     className="block px-3 py-2.5 mt-2 text-[15px] font-medium text-center bg-gradient-to-r from-emerald-400 to-emerald-500 text-black hover:from-emerald-500 hover:to-emerald-600 rounded-lg transition-all duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -366,23 +365,29 @@ export default function LandingPage() {
                   <span className="font-semibold text-white">perfect codes</span> and{' '}
                   <span className="font-semibold text-white">flag risks</span> before you submit.{' '}
                   <span className="block mt-2 text-emerald-300 font-semibold">
-                    It's guaranteed precision that pays for itself.
+                    It&apos;s guaranteed precision that pays for itself.
                   </span>
                 </p>
               </div>
               <div className="mt-8 flex flex-col gap-4 sm:flex-row">
                 <a 
-                  href="/savings-estimator" 
+                  href="/signup" 
                   className="rounded-xl bg-gradient-to-r from-emerald-400 to-emerald-500 px-6 py-4 text-center text-lg font-medium text-black hover:from-emerald-500 hover:to-emerald-600 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-400/20 active:scale-95"
                 >
-                  Calculate My Savings
+                  Get Started Free
                 </a>
-                <a 
+                {/* <a 
+                  href="/savings-estimator" 
+                  className="rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm px-6 py-4 text-center text-lg font-medium text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 hover:shadow-lg hover:shadow-white/5 active:scale-95"
+                >
+                  Calculate My Savings
+                </a> */}
+                {/* <a 
                   href="#how-it-works" 
                   className="rounded-xl border border-white/20 bg-white/5 backdrop-blur-sm px-6 py-4 text-center text-lg font-medium text-white hover:bg-white/10 hover:border-white/30 transition-all duration-300 hover:shadow-lg hover:shadow-white/5 active:scale-95 flex items-center justify-center gap-2"
                 >
                   <span className="text-emerald-400">▶</span> Watch the 90-Second Demo
-                </a>
+                </a> */}
               </div>
               <div className="mt-8 flex items-center gap-6 text-sm text-gray-300">
                 <div>⏱ Setup in Days</div>
@@ -480,6 +485,16 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+      
+      {/* Why Our Service Section Title */}
+      <section className={`py-12 ${isDark ? 'bg-black/95' : 'bg-white'}`}>
+        <div className="mx-auto max-w-7xl px-6 md:px-10">
+          <div className="text-center">
+            <h2 className={`text-4xl md:text-5xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>Why Our Service</h2>
+          </div>
+        </div>
+      </section>
+
       {/* Why Our Service - Alternating Layout */}
   <section id="why-our-service" className={`scroll-mt-24 ${isDark ? 'bg-black/95' : 'bg-white'}`}>
     
@@ -499,7 +514,7 @@ export default function LandingPage() {
               Stop billing denials at the source. We turn messy, unstructured clinical documentation into perfect, auditable claims before they ever leave your office.
             </p>
             <p className={`text-base leading-relaxed mb-8 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-              Our AI-powered platform analyzes clinical notes in real-time, suggesting accurate codes while flagging potential issues before submission. Your team stays in control, while our system learns and improves with every review.
+              Our platform analyzes clinical notes in real-time, suggesting accurate codes while flagging potential issues before submission. Your team stays in control, while our system learns and improves with every review.
             </p>
             <a href="#how-it-works" className={`inline-flex items-center justify-center rounded-xl px-8 py-4 text-base font-semibold transition-all duration-300 active:scale-95 ${isDark ? 'bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 text-black hover:brightness-110 shadow-lg' : 'bg-emerald-600 text-white shadow-lg hover:bg-emerald-700 hover:shadow-xl'}`}>
               See How It Works
@@ -580,57 +595,34 @@ export default function LandingPage() {
       </div>
     </div>
 
-    {/* SECTION 3: Optional - Image Left (Placeholder for future content) */}
+    {/* SECTION 3: Enterprise-Ready - Centered Content */}
     <div className={`py-20 ${isDark ? 'bg-black/95' : 'bg-white'}`}>
-      <div className="mx-auto max-w-7xl px-6 md:px-10">
-        <div className="grid gap-12 lg:grid-cols-5 lg:items-center">
-          {/* Left: Screenshot/Dashboard Placeholder (40%) */}
-          <div className="lg:col-span-2 order-2 lg:order-1">
-            <div className="relative group">
-              <div className={`relative overflow-hidden rounded-3xl shadow-2xl ${isDark ? 'border border-white/10 bg-white/5' : 'border border-gray-200 bg-white'}`}>
-                <div className="aspect-[4/3] w-full relative">
-                  {/* Placeholder for platform screenshot */}
-                  <div className={`absolute inset-0 flex items-center justify-center ${isDark ? 'bg-gradient-to-br from-gray-800 to-gray-900' : 'bg-gradient-to-br from-gray-100 to-gray-200'}`}>
-                    <div className="text-center p-8">
-                      <svg className={`h-16 w-16 mx-auto mb-4 ${isDark ? 'text-gray-600' : 'text-gray-400'}`} fill='none' stroke='currentColor' strokeWidth='1.5' viewBox='0 0 24 24'><rect x='3' y='3' width='18' height='18' rx='2'/><path d='M3 9h18'/><path d='M9 21V9'/></svg>
-                      <p className={`text-sm font-medium ${isDark ? 'text-gray-500' : 'text-gray-500'}`}>Platform Dashboard Preview</p>
-                      <p className={`text-xs mt-2 ${isDark ? 'text-gray-600' : 'text-gray-400'}`}>Coming soon</p>
-                    </div>
-                  </div>
-                </div>
+      <div className="mx-auto max-w-4xl px-6 md:px-10 text-center">
+        <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium tracking-wide uppercase mb-6 ${isDark ? 'border border-emerald-400/30 bg-emerald-400/10 text-emerald-300' : 'border border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+          <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${isDark ? 'bg-emerald-400' : 'bg-emerald-500'}`} /> BUILT FOR HEALTHCARE
+        </div>
+        <h3 className={`text-3xl md:text-4xl font-extrabold tracking-tight leading-tight mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          Enterprise-Ready from Day One
+        </h3>
+        <p className={`text-lg leading-relaxed mb-8 max-w-2xl mx-auto ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+          Built with healthcare compliance at its core. POPIA-ready, HIPAA-aligned, and designed for the demanding requirements of modern medical practices.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
+          {[
+            { label: 'Role-based access control', sublabel: 'Granular permissions for your entire team' },
+            { label: 'Full audit trails', sublabel: 'Track every change, every review, every decision' },
+            { label: 'Data locality controls', sublabel: 'Your data stays where you need it: EU, SA, or US' },
+          ].map((benefit, idx) => (
+            <div key={idx} className={`p-6 rounded-xl transition-colors text-center ${isDark ? 'hover:bg-white/5 border border-white/10' : 'hover:bg-gray-50 border border-gray-200'}`}>
+              <div className={`flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-white mx-auto mb-4`}>
+                <svg className='h-6 w-6' fill='none' stroke='currentColor' strokeWidth='2.5' strokeLinecap='round' strokeLinejoin='round' viewBox='0 0 24 24'><path d='M5 13l4 4L19 7'/></svg>
+              </div>
+              <div>
+                <div className={`text-base font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>{benefit.label}</div>
+                <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{benefit.sublabel}</div>
               </div>
             </div>
-          </div>
-
-          {/* Right: Additional Benefits / Testimonial Space (60%) */}
-          <div className="lg:col-span-3 order-1 lg:order-2">
-            <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium tracking-wide uppercase mb-6 ${isDark ? 'border border-emerald-400/30 bg-emerald-400/10 text-emerald-300' : 'border border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
-              <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${isDark ? 'bg-emerald-400' : 'bg-emerald-500'}`} /> BUILT FOR HEALTHCARE
-            </div>
-            <h3 className={`text-3xl md:text-4xl font-extrabold tracking-tight leading-tight mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              Enterprise-Ready from Day One
-            </h3>
-            <p className={`text-lg leading-relaxed mb-8 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-              Built with healthcare compliance at its core. POPIA-ready, HIPAA-aligned, and designed for the demanding requirements of modern medical practices.
-            </p>
-            <div className="space-y-4">
-              {[
-                { label: 'Role-based access control', sublabel: 'Granular permissions for your entire team' },
-                { label: 'Full audit trails', sublabel: 'Track every change, every review, every decision' },
-                { label: 'Data locality controls', sublabel: 'Your data stays where you need it: EU, SA, or US' },
-              ].map((benefit, idx) => (
-                <div key={idx} className={`flex items-start gap-4 p-4 rounded-xl transition-colors ${isDark ? 'hover:bg-white/5' : 'hover:bg-gray-50'}`}>
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex-shrink-0`}>
-                    <svg className='h-5 w-5' fill='none' stroke='currentColor' strokeWidth='2.5' strokeLinecap='round' strokeLinejoin='round' viewBox='0 0 24 24'><path d='M5 13l4 4L19 7'/></svg>
-                  </div>
-                  <div>
-                    <div className={`text-base font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>{benefit.label}</div>
-                    <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{benefit.sublabel}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>
@@ -639,10 +631,6 @@ export default function LandingPage() {
 
       {/* Trust Logos removed per request */}
 
-      {/* Link to FAQ page before Get started section */}
-      <div className="py-10 text-center">
-        <a href="/faqs" className={`inline-block rounded-xl px-6 py-3 text-lg font-semibold transition active:scale-95 ${isDark ? 'bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 text-black hover:brightness-105' : 'bg-emerald-600 text-white shadow-sm hover:bg-emerald-700'}`}>View All FAQs</a>
-      </div>
       {/* How it works — themable */}
   <section id="how-it-works" className={`py-20 scroll-mt-24 ${isDark ? 'bg-black/95' : 'bg-white'}`}>
         <div className="mx-auto max-w-7xl px-6 md:px-10">
@@ -713,7 +701,67 @@ export default function LandingPage() {
 
       {/* Pricing removed per request */}
 
+      {/* CTA Section - Start Free Trial */}
+      <section className={`py-20 ${isDark ? 'bg-gradient-to-r from-emerald-900/20 via-black/95 to-teal-900/20' : 'bg-gradient-to-r from-emerald-50 via-white to-teal-50'}`}>
+        <div className="mx-auto max-w-4xl px-6 md:px-10 text-center">
+          <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-medium tracking-wide uppercase mb-6 ${isDark ? 'border border-emerald-400/30 bg-emerald-400/10 text-emerald-300' : 'border border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+            <span className={`h-1.5 w-1.5 rounded-full animate-pulse ${isDark ? 'bg-emerald-400' : 'bg-emerald-500'}`} /> Ready to Get Started?
+          </div>
+          
+          <h2 className={`text-4xl md:text-5xl font-extrabold tracking-tight mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            Start Your Free Trial Today
+          </h2>
+          
+          <p className={`text-xl mb-8 max-w-2xl mx-auto ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+            Join leading clinics across South Africa who trust Vukazine to eliminate billing denials. 
+            Setup takes days, not months.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a 
+              href="/signup" 
+              className={`rounded-xl px-8 py-4 text-lg font-semibold transition-all duration-300 hover:shadow-lg active:scale-95 ${isDark ? 'bg-gradient-to-r from-emerald-400 to-emerald-500 text-black hover:from-emerald-500 hover:to-emerald-600 hover:shadow-emerald-400/20' : 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white hover:from-emerald-600 hover:to-emerald-700 hover:shadow-emerald-500/20'}`}
+            >
+              Start Free Trial
+            </a>
+            
+            <a 
+              href="/login" 
+              className={`rounded-xl border px-8 py-4 text-lg font-semibold transition-all duration-300 hover:shadow-lg active:scale-95 ${isDark ? 'border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30' : 'border-gray-300 bg-white text-gray-900 hover:bg-gray-50 hover:border-gray-400'}`}
+            >
+              Sign In
+            </a>
+          </div>
+          
+          <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm">
+            <div className={`flex items-center gap-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              14-day free trial
+            </div>
+            <div className={`flex items-center gap-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              No credit card required
+            </div>
+            <div className={`flex items-center gap-2 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+              <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              </svg>
+              Setup in days
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Standalone FAQ removed per request; FAQ now lives in Trust section */}
+
+      {/* Link to FAQ page before Get started section */}
+      <div className="py-10 text-center">
+        <a href="/faqs" className={`inline-block rounded-xl px-6 py-3 text-lg font-semibold transition active:scale-95 ${isDark ? 'bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-500 text-black hover:brightness-105' : 'bg-emerald-600 text-white shadow-sm hover:bg-emerald-700'}`}>View All FAQs</a>
+      </div>
 
       {/* Contact — themable */}
       <section id="book" className={`py-20 ${isDark ? 'bg-black/95' : 'bg-gray-50'}`}>
