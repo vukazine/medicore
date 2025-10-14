@@ -13,7 +13,23 @@ import {
   UserCredential,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { auth, db } from '@/lib/firebase';
+
+// Lazy load Firebase to avoid issues during build
+let auth: any = null;
+let db: any = null;
+
+const initializeFirebase = async () => {
+  if (!auth || !db) {
+    try {
+      const { auth: firebaseAuth, db: firebaseDb } = await import('@/lib/firebase');
+      auth = firebaseAuth;
+      db = firebaseDb;
+    } catch (error) {
+      console.warn('Firebase initialization failed during build:', error);
+    }
+  }
+  return { auth, db };
+};
 
 interface AuthContextType {
   currentUser: User | null;
@@ -46,6 +62,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Sign up function
   async function signup(email: string, password: string, userData: any) {
+    const { auth, db } = await initializeFirebase();
+    if (!auth || !db) throw new Error('Firebase not initialized');
+    
     const result = await createUserWithEmailAndPassword(auth, email, password);
     
     // Update user profile
@@ -72,6 +91,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Sign in function
   async function login(email: string, password: string) {
+    const { auth, db } = await initializeFirebase();
+    if (!auth || !db) throw new Error('Firebase not initialized');
+    
     const result = await signInWithEmailAndPassword(auth, email, password);
     
     // Try to update last login in Firestore (optional)
@@ -88,12 +110,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   // Sign out function
-  function logout() {
+  async function logout() {
+    const { auth } = await initializeFirebase();
+    if (!auth) throw new Error('Firebase not initialized');
     return signOut(auth);
   }
 
   // Reset password function
-  function resetPassword(email: string) {
+  async function resetPassword(email: string) {
+    const { auth } = await initializeFirebase();
+    if (!auth) throw new Error('Firebase not initialized');
     return sendPasswordResetEmail(auth, email);
   }
 
@@ -111,6 +137,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       throw new Error('No user is currently logged in');
     }
 
+    const { db } = await initializeFirebase();
+
     // Update Firebase Auth profile
     if (data.displayName) {
       await updateProfile(currentUser, {
@@ -120,10 +148,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     // Try to update Firestore document (optional)
     try {
-      await setDoc(doc(db, 'users', currentUser.uid), {
-        ...data,
-        updatedAt: new Date().toISOString(),
-      }, { merge: true });
+      if (db) {
+        await setDoc(doc(db, 'users', currentUser.uid), {
+          ...data,
+          updatedAt: new Date().toISOString(),
+        }, { merge: true });
+      }
     } catch (firestoreError) {
       console.warn('Could not update user data in Firestore:', firestoreError);
       // Continue without Firestore - profile update still works
@@ -131,12 +161,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
+    let unsubscribe: (() => void) | undefined;
+    
+    initializeFirebase().then(({ auth }) => {
+      if (auth) {
+        unsubscribe = onAuthStateChanged(auth, (user) => {
+          setCurrentUser(user);
+          setLoading(false);
+        });
+      } else {
+        setLoading(false);
+      }
+    }).catch(() => {
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, []);
 
   const value = {
